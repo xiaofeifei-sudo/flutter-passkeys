@@ -267,8 +267,8 @@ class PasskeysApiCodec: FlutterStandardMessageCodec {
 protocol PasskeysApi {
   func canAuthenticate() throws -> Bool
   func hasBiometrics() throws -> Bool
-  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, attestationPreference: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
-  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
+  func register(challenge: String, relyingParty: RelyingParty, user: User, excludeCredentials: [CredentialType], pubKeyCredValues: [Int64], canBePlatformAuthenticator: Bool, canBeSecurityKey: Bool, residentKeyPreference: String?, userVerificationPreference: String?, attestationPreference: String?, completion: @escaping (Result<RegisterResponse, Error>) -> Void)
+  func authenticate(relyingPartyId: String, challenge: String, conditionalUI: Bool, allowedCredentials: [CredentialType], preferImmediatelyAvailableCredentials: Bool, userVerificationPreference: String?, completion: @escaping (Result<AuthenticateResponse, Error>) -> Void)
   func cancelCurrentAuthenticatorOperation(completion: @escaping (Result<Void, Error>) -> Void)
 }
 
@@ -316,8 +316,9 @@ class PasskeysApiSetup {
         let canBePlatformAuthenticatorArg = args[5] as! Bool
         let canBeSecurityKeyArg = args[6] as! Bool
         let residentKeyPreferenceArg: String? = nilOrValue(args[7])
-        let attestationPreferenceArg: String? = nilOrValue(args[8])
-        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentials: excludeCredentialsArg, pubKeyCredValues: pubKeyCredValuesArg, canBePlatformAuthenticator: canBePlatformAuthenticatorArg, canBeSecurityKey: canBeSecurityKeyArg, residentKeyPreference: residentKeyPreferenceArg, attestationPreference: attestationPreferenceArg) { result in
+        let userVerificationPreferenceArg: String? = nilOrValue(args[8])
+        let attestationPreferenceArg: String? = nilOrValue(args[9])
+        api.register(challenge: challengeArg, relyingParty: relyingPartyArg, user: userArg, excludeCredentials: excludeCredentialsArg, pubKeyCredValues: pubKeyCredValuesArg, canBePlatformAuthenticator: canBePlatformAuthenticatorArg, canBeSecurityKey: canBeSecurityKeyArg, residentKeyPreference: residentKeyPreferenceArg, userVerificationPreference: userVerificationPreferenceArg, attestationPreference: attestationPreferenceArg) { result in
           switch result {
             case .success(let res):
               reply(wrapResult(res))
@@ -338,7 +339,8 @@ class PasskeysApiSetup {
         let conditionalUIArg = args[2] as! Bool
         let allowedCredentialsArg = args[3] as! [CredentialType]
         let preferImmediatelyAvailableCredentialsArg = args[4] as! Bool
-        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg) { result in
+        let userVerificationPreferenceArg: String? = nilOrValue(args[5])
+        api.authenticate(relyingPartyId: relyingPartyIdArg, challenge: challengeArg, conditionalUI: conditionalUIArg, allowedCredentials: allowedCredentialsArg, preferImmediatelyAvailableCredentials: preferImmediatelyAvailableCredentialsArg, userVerificationPreference: userVerificationPreferenceArg) { result in
           switch result {
             case .success(let res):
               reply(wrapResult(res))

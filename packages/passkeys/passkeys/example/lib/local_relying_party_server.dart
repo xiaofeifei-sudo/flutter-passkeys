@@ -21,7 +21,7 @@ class LocalUser {
 const rpID = kIsWeb &&
         String.fromEnvironment('IS_VERCEL', defaultValue: 'false') != 'true'
     ? 'localhost'
-    : 'flutter.corbado.io';
+    : 'beta.hawalletx.cc';
 
 /// This is a local version of a relying party server.
 ///
@@ -69,7 +69,7 @@ class LocalRelyingPartyServer {
       'authenticatorSelection': {
         'requireResidentKey': false,
         'residentKey': 'required',
-        'userVerification': 'preferred',
+        'userVerification': 'required',
       },
       'timeout': configuration?.timeout ?? 60000,
     };
@@ -157,7 +157,7 @@ class LocalRelyingPartyServer {
     final request = <String, dynamic>{
       'challenge': challenge,
       'rpId': rpID,
-      'userVerification': 'preferred',
+      'userVerification': 'required',
       'timeout': configuration?.timeout ?? 60000,
     };
 

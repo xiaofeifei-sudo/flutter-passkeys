@@ -52,6 +52,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         canBePlatformAuthenticator: Bool = true,
         canBeSecurityKey: Bool = true,
         residentKeyPreference: String?,
+        userVerificationPreference: String?,
         attestationPreference: String?,
         completion: @escaping (Result<RegisterResponse, Error>) -> Void
     ) {
@@ -82,6 +83,19 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                 userID: decodedUserId
             )
             
+            if #available(iOS 17.4, *) {
+                switch userVerificationPreference {
+                case .some("required"):
+                    platformRequest.userVerificationPreference = .required
+                case .some("preferred"):
+                    platformRequest.userVerificationPreference = .preferred
+                case .some("discouraged"):
+                    platformRequest.userVerificationPreference = .discouraged
+                default:
+                    break
+                }
+            }
+            
 
             if #available(iOS 17.4, *) {
                 let excluded = parseCredentials(credentials: excludeCredentials)
@@ -100,6 +114,19 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
                 name: user.name,
                 userID: decodedUserId
             )
+
+            if #available(iOS 17.4, *) {
+                switch userVerificationPreference {
+                case .some("required"):
+                    externalRequest.userVerificationPreference = .required
+                case .some("preferred"):
+                    externalRequest.userVerificationPreference = .preferred
+                case .some("discouraged"):
+                    externalRequest.userVerificationPreference = .discouraged
+                default:
+                    break
+                }
+            }
 
             switch residentKeyPreference {
             case .some("preferred"):
@@ -154,6 +181,7 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         conditionalUI: Bool,
         allowedCredentials: [CredentialType],
         preferImmediatelyAvailableCredentials: Bool,
+        userVerificationPreference: String?,
         completion: @escaping (Result<AuthenticateResponse, Error>) -> Void
     ) {
         guard (try? canAuthenticate()) == true else {
@@ -170,6 +198,18 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
         let platformRequest = platformProvider.createCredentialAssertionRequest(challenge: decodedChallenge)
+        if #available(iOS 17.4, macOS 14.4, *) {
+            switch userVerificationPreference {
+            case .some("required"):
+                platformRequest.userVerificationPreference = .required
+            case .some("preferred"):
+                platformRequest.userVerificationPreference = .preferred
+            case .some("discouraged"):
+                platformRequest.userVerificationPreference = .discouraged
+            default:
+                break
+            }
+        }
         platformRequest.allowedCredentials = parseCredentials(credentials: allowedCredentials)
         requests.append(platformRequest)
         
@@ -178,6 +218,18 @@ public class PasskeysPlugin: NSObject, FlutterPlugin, PasskeysApi {
         if !preferImmediatelyAvailableCredentials && !conditionalUI {
             let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: relyingPartyId)
             let externalRequest = securityKeyProvider.createCredentialAssertionRequest(challenge: decodedChallenge)
+            if #available(iOS 17.4, macOS 14.4, *) {
+                switch userVerificationPreference {
+                case .some("required"):
+                    externalRequest.userVerificationPreference = .required
+                case .some("preferred"):
+                    externalRequest.userVerificationPreference = .preferred
+                case .some("discouraged"):
+                    externalRequest.userVerificationPreference = .discouraged
+                default:
+                    break
+                }
+            }
             externalRequest.allowedCredentials = parseSecurityKeyCredentials(credentials: allowedCredentials)
             requests.append(externalRequest)
         }

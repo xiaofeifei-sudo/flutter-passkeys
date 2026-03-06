@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>com.apple.developer.associated-domains</key>
-	<array>
-		<string>webcredentials:flutter.corbado.io?mode=developer</string>
-		<string>webcredentials:flutter.corbado.io</string>
-	</array>
+    	<array>
+    		<string>webcredentials:beta.hawalletx.cc</string>
+    		<string>webcredentials:beta.hawalletx.cc?mode=developer</string>
+    	</array>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
 	<key>com.apple.security.cs.allow-jit</key>

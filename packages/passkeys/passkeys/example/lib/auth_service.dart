@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:passkeys/authenticator.dart';
 import 'package:passkeys/availability.dart';
 import 'package:passkeys/types.dart';
@@ -57,7 +58,11 @@ class AuthService {
     final jsonRequestString =
         rps.startPasskeyLogin(name: email, configuration: loginConfiguration);
 
-    final request = AuthenticateRequestType.fromJsonString(jsonRequestString);
+    final request = AuthenticateRequestType.fromJsonString(
+      jsonRequestString,
+      mediation: MediationType.Optional,
+      preferImmediatelyAvailableCredentials: true,
+    );
     final authenticatorRes = await authenticator.authenticate(request);
 
     rps.finishPasskeyLogin(response: authenticatorRes.toJsonString());
@@ -66,7 +71,13 @@ class AuthService {
   Future<void> loginWithPasskeyConditionalUI() async {
     final jsonRequestString = rps.startPasskeyLoginConditionalU();
 
-    final request = AuthenticateRequestType.fromJsonString(jsonRequestString);
+    final decoded = jsonDecode(jsonRequestString) as Map<String, dynamic>;
+    decoded['userVerification'] = 'required';
+    final request = AuthenticateRequestType.fromJson(
+      decoded,
+      mediation: MediationType.Conditional,
+      preferImmediatelyAvailableCredentials: true,
+    );
     final authenticatorRes = await authenticator.authenticate(request);
 
     rps.finishPasskeyLoginConditionalUI(

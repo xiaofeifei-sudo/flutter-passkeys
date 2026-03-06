@@ -307,12 +307,12 @@ class PasskeysApi {
     }
   }
 
-  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey, String? arg_residentKeyPreference, String? arg_attestationPreference) async {
+  Future<RegisterResponse> register(String arg_challenge, RelyingParty arg_relyingParty, User arg_user, List<CredentialType?> arg_excludeCredentials, List<int?> arg_pubKeyCredValues, bool arg_canBePlatformAuthenticator, bool arg_canBeSecurityKey, String? arg_residentKeyPreference, String? arg_userVerificationPreference, String? arg_attestationPreference) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.register', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentials, arg_pubKeyCredValues, arg_canBePlatformAuthenticator, arg_canBeSecurityKey, arg_residentKeyPreference, arg_attestationPreference]) as List<Object?>?;
+        await channel.send(<Object?>[arg_challenge, arg_relyingParty, arg_user, arg_excludeCredentials, arg_pubKeyCredValues, arg_canBePlatformAuthenticator, arg_canBeSecurityKey, arg_residentKeyPreference, arg_userVerificationPreference, arg_attestationPreference]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -334,12 +334,12 @@ class PasskeysApi {
     }
   }
 
-  Future<AuthenticateResponse> authenticate(String arg_relyingPartyId, String arg_challenge, bool arg_conditionalUI, List<CredentialType?> arg_allowedCredentials, bool arg_preferImmediatelyAvailableCredentials) async {
+  Future<AuthenticateResponse> authenticate(String arg_relyingPartyId, String arg_challenge, bool arg_conditionalUI, List<CredentialType?> arg_allowedCredentials, bool arg_preferImmediatelyAvailableCredentials, String? arg_userVerificationPreference) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.passkeys_darwin.PasskeysApi.authenticate', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_relyingPartyId, arg_challenge, arg_conditionalUI, arg_allowedCredentials, arg_preferImmediatelyAvailableCredentials]) as List<Object?>?;
+        await channel.send(<Object?>[arg_relyingPartyId, arg_challenge, arg_conditionalUI, arg_allowedCredentials, arg_preferImmediatelyAvailableCredentials, arg_userVerificationPreference]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

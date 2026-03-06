@@ -122,6 +122,7 @@ abstract class PasskeysApi {
     bool canBePlatformAuthenticator,
     bool canBeSecurityKey,
     String? residentKeyPreference,
+    String? userVerificationPreference,
     String? attestationPreference,
   );
 
@@ -132,6 +133,7 @@ abstract class PasskeysApi {
     bool conditionalUI,
     List<CredentialType> allowedCredentials,
     bool preferImmediatelyAvailableCredentials,
+    String? userVerificationPreference,
   );
 
   @async
